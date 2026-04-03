@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "210000141177",
+    "project_id": "ghepxe-6e5aa",
+    "storage_bucket": "ghepxe-6e5aa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210000141177:android:73547f391d8745ca5b6da8",
+        "android_client_info": {
+          "package_name": "com.example.myhatd"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBe3e6KUYrx9TRr_PE4vJlb4t3SOE4zC5s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
