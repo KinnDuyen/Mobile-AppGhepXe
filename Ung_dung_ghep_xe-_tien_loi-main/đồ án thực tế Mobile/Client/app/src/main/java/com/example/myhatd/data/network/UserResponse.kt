@@ -4,7 +4,7 @@ data class UserResponse(
     val userId: Long?,
     val name: String?,
     val canCuocCongDan: String?,     // CCCD
-    val phoneNumber: String?,       // SĐT
+    val phoneNumber: String?,       // SĐT 
     val role: String,
     val message: String?,// Thông điệp BE trả về
 
