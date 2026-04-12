@@ -9,16 +9,19 @@ import com.example.myhatd.data.model.TripRequestResponse
 import com.example.myhatd.data.model.YeuCauChuyenDi
 import com.example.myhatd.data.network.RetrofitClient
 import com.example.myhatd.ui.customer.SearchField
-import com.google.android.gms.maps.model.LatLng
+// XÓA: import com.google.android.gms.maps.model.LatLng
+// ✅ THAY THẾ BẰNG MAPLIBRE LATLNG
+import org.maplibre.android.geometry.LatLng
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-// Sealed Class để quản lý trạng thái yêu cầu API
+// Sealed Class để quản lý trạng thái yêu cầu API (Giữ nguyên)
 sealed class TripRequestState {
     object Idle : TripRequestState()
     object Loading : TripRequestState()
@@ -61,14 +64,16 @@ class LocationSearchViewModel(
     private val _activeSearchField = MutableStateFlow(SearchField.NONE)
     val activeSearchField: StateFlow<SearchField> = _activeSearchField
 
+    // ✅ SỬA LỖI 1: Thay LatLng Google Maps bằng LatLng MapLibre
     private val _selectedOriginLatLng = MutableStateFlow<LatLng?>(null)
     val selectedOriginLatLng: StateFlow<LatLng?> = _selectedOriginLatLng
 
+    // ✅ SỬA LỖI 2: Thay LatLng Google Maps bằng LatLng MapLibre
     private val _selectedDestinationLatLng = MutableStateFlow<LatLng?>(null)
     val selectedDestinationLatLng: StateFlow<LatLng?> = _selectedDestinationLatLng
 
     // =======================================================
-    // 3. API CALL: TRIP REQUEST STATUS
+    // 3. API CALL: TRIP REQUEST STATUS (Giữ nguyên)
     // =======================================================
     private val _tripRequestStatus = MutableStateFlow<TripRequestState>(TripRequestState.Idle)
     val tripRequestStatus: StateFlow<TripRequestState> = _tripRequestStatus
@@ -77,7 +82,7 @@ class LocationSearchViewModel(
         _tripRequestStatus.value = TripRequestState.Idle
     }
     // =======================================================
-    // 4. API CALL: SEND TRIP REQUEST
+    // 4. API CALL: SEND TRIP REQUEST (Giữ nguyên logic)
     // =======================================================
 
     fun sendTripRequest(phoneNumber: String, role: String) {
@@ -95,6 +100,7 @@ class LocationSearchViewModel(
             // Dùng tên địa điểm đã được chọn
             tenDiemDi = originSearchText.value,
             tenDiemDen = destinationSearchText.value,
+            // LatLng MapLibre vẫn có thuộc tính latitude và longitude
             viDoDiemDi = origin.latitude,
             kinhDoDiemDi = origin.longitude,
             viDoDiemDen = destination.latitude,
@@ -130,9 +136,10 @@ class LocationSearchViewModel(
     }
 
     // =======================================================
-    // 5. LOCATION AND SEARCH LOGIC (Đã sửa lỗi gợi ý)
+    // 5. LOCATION AND SEARCH LOGIC
     // =======================================================
 
+    // ✅ SỬA LỖI 3: Thay LatLng Google Maps bằng LatLng MapLibre
     fun useCurrentLocation(context: Context, latLng: LatLng?) {
         if (latLng == null) {
             _originSearchText.value = "GPS chưa hoạt động hoặc quyền bị từ chối."
@@ -148,6 +155,7 @@ class LocationSearchViewModel(
 
         viewModelScope.launch {
             try {
+                // LatLng MapLibre vẫn có thuộc tính latitude và longitude
                 val address = repository.reverseGeocode(context, latLng.latitude, latLng.longitude)
 
                 _selectedOriginLatLng.value = latLng
@@ -226,6 +234,7 @@ class LocationSearchViewModel(
                 try {
                     val lat = result.lat.toDouble()
                     val lon = result.lon.toDouble()
+                    // ✅ SỬA LỖI 4: Thay LatLng Google Maps bằng LatLng MapLibre
                     _selectedOriginLatLng.value = LatLng(lat, lon)
                 } catch (e: Exception) { /* Bỏ qua lỗi chuyển đổi */ }
             }
@@ -234,6 +243,7 @@ class LocationSearchViewModel(
                 try {
                     val lat = result.lat.toDouble()
                     val lon = result.lon.toDouble()
+                    // ✅ SỬA LỖI 4: Thay LatLng Google Maps bằng LatLng MapLibre
                     _selectedDestinationLatLng.value = LatLng(lat, lon)
                 } catch (e: Exception) { /* Bỏ qua lỗi chuyển đổi */ }
             }
